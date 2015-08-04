@@ -43,17 +43,17 @@ For each option on the configuration file, we can define:
 - type => [string, integer, bool, dict, list]
 - mandatory => [0, 1]
 - values => List of supported values (only for integer, string and list type)
-- validate => Advance validation with Regex or with another validate block
+- validate => Advance validation with Regex or with another validate block (nested dict)
 - default => Default value if option is not defined
 
-More detail example available here :
+Detail example available here :
 - [Configuration file - myconfig.yml]( https://github.com/dgarros/defconf/blob/master/myconfig.yml)
 - [Definition file - myconfig.def.yml]( https://github.com/dgarros/defconf/blob/master/myconfig.def.yml)
 
-### From CLI (within project folder)
+#### From CLI (within project folder)
     python defconf.py myconfig.yml myconfig.def.yml
 
-### From python
+#### From python
 ```python
 import defconf
 
@@ -62,10 +62,21 @@ config = yaml.load( open('myconfig.yml') )
 defconf.validate_config( config, definition, 'myconfig' )
 ```
 
+## Installation
+    git clone https://github.com/dgarros/defconf
+
 ## Enhancements list
 - Support JSON file in addition to YAML
 - Improve exception handling to catch as many issue as possible in one shot
 - Create example config file from Definition file
 - Create definition file for definition files :)
+- Create a module and publish
+
+## Support
+Bug and issues can be open on Github [https://github.com/dgarros/defconf/issues]
 
 ## How to contribute
+- Use it and share your config/def files
+- Report issue
+- Add unit tests
+- Improve documentation
