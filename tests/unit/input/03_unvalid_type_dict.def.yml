@@ -1,0 +1,18 @@
+
+validate:
+    main:
+        http_server:         { type: string, validate: http_srv, mandatory: 1 }
+        send_email_on_error: { type: bool, mandatory: 0, default: no }
+        '*':                 { mandatory: 0 }
+    db_srv:
+        ip_addr:        { type: string, validate: ip_addr, mandatory: 1  }
+        login:          { type: string, mandatory: 0, default: admin }
+        password:       { type: string, validate: valid_password, mandatory: 0, default: pwdabc }
+        port:           { type: integer, mandatory: 0 }
+    http_srv:
+        ip_addr:        { type: list, validate: ip_addr, mandatory: 1  }
+        port:           { type: integer, mandatory: 0 }
+
+regex:
+    ip_addr: ^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$
+    valid_password: ^[A-Za-z0-9\!]+$

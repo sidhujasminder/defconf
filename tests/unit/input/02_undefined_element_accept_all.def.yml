@@ -1,0 +1,6 @@
+
+validate:
+    main:
+        http_server:         { type: dict, mandatory: 1 }
+        send_email_on_error: { type: bool, mandatory: 0, default: no }
+        '*':                 { type: dict, mandatory: 0 }

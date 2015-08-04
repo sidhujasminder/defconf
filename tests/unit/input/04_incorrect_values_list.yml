@@ -1,0 +1,18 @@
+
+
+http_server:
+    ip_addr: [ 192.168.0.1, 192.168.0.2 ]
+    port: 8080
+
+ 
+## db is not defined in the def file, it should be database instead
+db:
+    ip_addr: 192.168.0.1
+    password: pwd!!
+    port: 4444
+
+send_email_on_error: yes
+
+default_port: 2222
+default_string: 'item01, item02'
+default_list: [ item01, item02 ]
