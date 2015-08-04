@@ -5,7 +5,7 @@ validate:
         database:            { type: dict, validate: db_srv, mandatory: 1 }
         send_email_on_error: { type: bool, mandatory: 0, default: no }
         syslog_server:       { type: string, validate: ip_addr, mandatory: 1 }
-        mail_servers_ports:  { type: integer, values: [25, 2580], default: 25 } 
+        mail_servers_ports:  { type: integer, values: [25, 2580], default: 25 }
 #        __exclusion:
 
     db_srv:
@@ -18,5 +18,6 @@ validate:
         port:           { type: integer, mandatory: 0 }
 
 regex:
-    ip_addr: ^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$
-    valid_password: ^[A-Za-z0-9\!]+$
+#    ip_addr: ^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])$
+    ip_addr: ^(\d+)\.(\d+)\.(\d+)\.(\d+)$
+    valid_password: ^[A-Za-z0-9\!\$]+$
