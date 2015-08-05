@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/dgarros/defconf.svg?branch=master)](https://travis-ci.org/dgarros/defconf)
+
 # Defconf
 Python Library/tool to easily define and validate the format and content of a configuration file
 
