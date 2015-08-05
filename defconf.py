@@ -1,10 +1,8 @@
 import yaml
 import logging
 import sys
-import logging
 import pprint
 import re
-
 
 '''
 == Reminder of available Exception ==

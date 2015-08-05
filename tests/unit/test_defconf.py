@@ -2,7 +2,7 @@ import unittest
 import yaml
 import sys
 import logging
-sys.path.insert(0,'../../')
+
 import defconf
 
 class Test_Validate_Main_Block(unittest.TestCase):
