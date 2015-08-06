@@ -107,6 +107,15 @@ class Test_Validate_Main_Block(unittest.TestCase):
         self.assertTrue( config['database'].has_key('login') )
         self.assertTrue( config['database']['login'] == 'admin' )
 
+    def test_nested_dict_wit_star(self):
+        files_name = '07_nested_dict_with_star'
+        definition = yaml.load( open(path.join(here, 'input', files_name + '.def.yml')) )
+        config = yaml.load( open(path.join(here, 'input', files_name + '.yml')) )
+
+        defconf.validate_config( config, definition, files_name )
+        ##
+        self.assertTrue( 1 )
+
 def main():
     unittest.main()
 

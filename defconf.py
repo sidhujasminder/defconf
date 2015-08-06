@@ -37,7 +37,7 @@ RuntimeError 	        Raised when a generated error does not fall into any categ
 NotImplementedError     Raised when an abstract method that needs to be implemented in an inherited class is not actually implemented.
 '''
 
-logging.basicConfig(format='defconf - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='defconf - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 type_list = {}
 type_list['string'] = "<type 'str'>"
@@ -70,6 +70,7 @@ def main():
 
     try:
         validate_config( config, definition, config_file_name )
+        print ' = Configuration file  valid = '
     except Exception as e:
         logging.error('Configuration file not valid : ' + str(e))
 
@@ -100,6 +101,7 @@ def validate_dict( config, definition, definition_file, name ):
         ## Define name to use for logging and reporting
         ## If needed update the key in case it's *
         item_name = name + '.' + key
+        initial_key = key
         if not definition.has_key(key):
             logging.debug('->validate_dict() Key replace to "*" for %s', item_name )
             key = '*'
@@ -174,9 +176,9 @@ def validate_dict( config, definition, definition_file, name ):
 
             elif validate_type == 'block':
                 validate_name = definition[key]['validate']
-                logging.debug('->validate_dict() %s: Will check block %s with %s', item_name, key, validate_name )
+                logging.debug('->validate_dict() %s: Will check block %s with %s', item_name, initial_key, validate_name )
 
-                validate_dict(config[key], definition_file['validate'][validate_name], definition_file, item_name)
+                validate_dict(config[initial_key], definition_file['validate'][validate_name], definition_file, item_name)
 
             else:
                 raise RuntimeError("Unexpected error, should never end here")
