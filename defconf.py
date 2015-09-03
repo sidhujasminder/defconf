@@ -37,7 +37,8 @@ RuntimeError 	        Raised when a generated error does not fall into any categ
 NotImplementedError     Raised when an abstract method that needs to be implemented in an inherited class is not actually implemented.
 '''
 
-logging.basicConfig(format='defconf - %(levelname)s - %(message)s', level=logging.DEBUG)
+logger = logging.getLogger( 'defconf' )
+logger.setLevel(logging.INFO)
 
 type_list = {}
 type_list['string'] = "<type 'str'>"
@@ -53,7 +54,7 @@ def main():
     config_file_name = sys.argv[1]
     definition_file_name = sys.argv[2]
 
-    logging.info('Will load Config "%s" and def "%s"', config_file_name, definition_file_name )
+    logger.info('Will load Config "%s" and def "%s"', config_file_name, definition_file_name )
 
     ## load master definition file
     # master_definition_file = open('definitionfile.def.yml')
@@ -70,16 +71,16 @@ def main():
 
     try:
         validate_config( config, definition, config_file_name )
-        print ' = Configuration file  valid = '
+        print ' = Configuration file valid = '
     except Exception as e:
-        logging.error('Configuration file not valid : ' + str(e))
+        logger.error('Configuration file not valid : ' + str(e))
 
 def validate_config( config_file, definition_file, name ):
     validate_dict( config_file, definition_file['validate']['main'], definition_file, 'root' )
 
 def validate_dict( config, definition, definition_file, name ):
     global type_list
-    logging.debug('->validate_dict() Start for %s ', name )
+    logger.debug('->validate_dict() Start for %s ', name )
 
     ## Go over all elements of config
     for key, value in config.iteritems():
@@ -103,15 +104,15 @@ def validate_dict( config, definition, definition_file, name ):
         item_name = name + '.' + key
         initial_key = key
         if not definition.has_key(key):
-            logging.debug('->validate_dict() Key replace to "*" for %s', item_name )
+            logger.debug('->validate_dict() Key replace to "*" for %s', item_name )
             key = '*'
 
         item_type = type(value)
-        logging.debug('->validate_dict() %s Check element content, type is %s ', item_name, str(item_type) )
+        logger.debug('->validate_dict() %s Check element content, type is %s ', item_name, str(item_type) )
 
         ## Check type if type is define
         if definition[key].has_key('type'):
-            logging.debug('->validate_dict() %s: Option "type" found, will check if is %s', item_name, definition[key]['type'] )
+            logger.debug('->validate_dict() %s: Option "type" found, will check if is %s', item_name, definition[key]['type'] )
 
             if str(item_type) == "<type 'dict'>" or str(item_type) == "<type 'list'>" or str(item_type) == "<type 'str'>" or str(item_type) == "<type 'int'>" or str(item_type) == "<type 'bool'>":
                 if type_list[definition[key]['type']] != str(item_type):
@@ -121,7 +122,7 @@ def validate_dict( config, definition, definition_file, name ):
 
         ## Check values if define
         if definition[key].has_key('values'):
-            logging.debug('->validate_dict() %s: Option "values" found, will check if is %s', item_name, definition[key]['values'] )
+            logger.debug('->validate_dict() %s: Option "values" found, will check if is %s', item_name, definition[key]['values'] )
 
             do_match = 0
             for def_value in definition[key]['values']:
@@ -140,13 +141,13 @@ def validate_dict( config, definition, definition_file, name ):
 
         ## Check Regex
         if definition[key].has_key('validate'):
-            logging.debug('->validate_dict() %s: Option "validate" found, will check it', item_name )
+            logger.debug('->validate_dict() %s: Option "validate" found, will check it', item_name )
             validate_name = definition[key]['validate']
             validate_type = ''
 
             # check if is a Validate Block or a Regex
 
-            logging.debug('->validate_dict() %s: Will check search for %s in validate and regex sections', item_name, validate_name )
+            logger.debug('->validate_dict() %s: Will check search for %s in validate and regex sections', item_name, validate_name )
 
             if definition_file['validate'].has_key(validate_name):
                 validate_type = 'block'
@@ -176,7 +177,7 @@ def validate_dict( config, definition, definition_file, name ):
 
             elif validate_type == 'block':
                 validate_name = definition[key]['validate']
-                logging.debug('->validate_dict() %s: Will check block %s with %s', item_name, initial_key, validate_name )
+                logger.debug('->validate_dict() %s: Will check block %s with %s', item_name, initial_key, validate_name )
 
                 validate_dict(config[initial_key], definition_file['validate'][validate_name], definition_file, item_name)
 
@@ -189,8 +190,9 @@ def validate_dict( config, definition, definition_file, name ):
     for key, value in definition.iteritems():
         if value.has_key('default') and not config.has_key(key):
             item_name = name + '.' + key
-            logging.debug('->validate_dict() %s: Default value missing', item_name )
+            logger.debug('->validate_dict() %s: Default value missing', item_name )
             config[key] = value['default']
 
 if __name__ == '__main__':
+    logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s')
     main()
