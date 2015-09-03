@@ -12,7 +12,6 @@ class Test_Validate_Main_Block(unittest.TestCase):
     logger = logging.getLogger()
     logger.setLevel(logging.CRITICAL)
 
-
     def test_all_good(self):
         files_name = '01_all_good'
         definition = yaml.load( open(path.join(here, 'input', files_name + '.def.yml')) )
