@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
+import os
 
 here = path.abspath(path.dirname(__file__))
 
@@ -12,13 +13,15 @@ with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
 req_lines = [line.strip() for line in open(path.join(here, 'requirements.txt')).readlines()]
 install_reqs = list(filter(None, req_lines))
 
+del os.link
+
 setup(
     name='defconf',
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='0.1.1',
+    version='0.2.0',
     description='Python Library/tool to easily define and validate the format and content of a configuration file',
     url='https://github.com/dgarros/defconf',
     author='Damien Garros',
@@ -51,7 +54,6 @@ setup(
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
-    package_dir={'': 'defconf'},
     packages=find_packages(exclude=['tests*']),
 
     # If there are data files included in your packages that need to be
