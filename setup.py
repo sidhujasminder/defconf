@@ -35,8 +35,9 @@ setup(
         #   5 - Production/Stable
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
-        'Topic :: Software Development :: Validation Tools',
-        'License :: Apache',
+        'License :: OSI Approved :: Apache Software License',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Utilities',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
