@@ -1,0 +1,19 @@
+
+module missing_mandatory_element {
+  namespace "http://juniper.net/defconf";
+  prefix "defconf";
+
+  container http-server {
+    leaf-list ip_addr {
+      type string;
+    }
+    leaf port {
+      type uint32;
+      default 80;
+    }
+  }
+  leaf send_email_on_error {
+    type boolean;
+    mandatory true;
+  }
+}
