@@ -40,12 +40,12 @@ NotImplementedError     Raised when an abstract method that needs to be implemen
 logger = logging.getLogger('defconf')
 logger.setLevel(logging.DEBUG)
 
-streamhandler = logging.StreamHandler()
-streamhandler.setLevel(logging.DEBUG)
-# logger = logging.getLogger('defconf')
-formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-streamhandler.setFormatter(formatter)
-logger.addHandler(streamhandler)
+# streamhandler = logging.StreamHandler()
+# streamhandler.setLevel(logging.DEBUG)
+# # logger = logging.getLogger('defconf')
+# formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+# streamhandler.setFormatter(formatter)
+# logger.addHandler(streamhandler)
 
 type_list = {}
 type_list['string'] = "<type 'str'>"
@@ -56,81 +56,62 @@ type_list['list'] = "<type 'list'>"
 
 def one_argument(operator_args):
 
-    # Also Need to check if operator args is empty.
     try:
         possible_val = operator_args.split(',')
-        if len(possible_val) != 1:
-            print "Values not passed as expected for the operator"
-        else:
-            print "values are good"
+        if operator_args is None:
+            raise IndexError("Required number of variables not passed for the operator " + possible_val[0])
     except AttributeError:
-        print "Node Value is not defined on which operator must be used."
+        raise AttributeError("Node Value is not defined on which operator must be used.")
 
 def two_argument(operator_args):
-    print "two"
-    print operator_args
     try:
         possible_val = operator_args.split(',')
         if len(possible_val) != 2:
-            print "Values not passed as expected for the operator"
-        else:
-            print "Values are passed as good"
+            raise IndexError("Required number of variables not passed for the operator " + possible_val[0])
     except AttributeError:
-        print "Node Value is not defined on which operator must be used."
+        raise AttributeError("Node Value is not defined on which operator must be used.")
 
 def two_argument_numeric(operator_args):
-    print "numeric two"
     try:
         possible_val = operator_args.split(',')
         if len(possible_val) != 2:
-            print "Values not passed as expected for the operator"
+            raise IndexError("Required number of variables not passed for the operator " + possible_val[0])
         else:
-            print float(possible_val[1].strip())
-            print "Values are passed as good and floatable"
+            float(possible_val[1].strip())
 
     except AttributeError:
-        print "Node Value is not defined on which operator must be used."
+        raise AttributeError("Node Value is not defined on which operator must be used.")
 
     except ValueError:
-        print "Value Error found not floatable value"
+        raise ValueError("Value Error found not floatable value")
 
 def three_argument_numeric(operator_args):
-    # print "3 numeric"
-    logger.warning("Node Value is not defined on which operator must be used.")
     # print operator_args
     # now we need to check if values are floatable
     try:
         possible_val = operator_args.split(',')
         if len(possible_val) != 3:
-            # print "Values not passed as expected for the operator"
-            raise ValueError("Value Error found not floatable value")
+            raise IndexError("Required number of variables not passed for the operator " + possible_val[0])
         else:
             for i in possible_val[1:]:
-                print float(i.strip())
-
+                    float(i.strip())
     except AttributeError:
-        # print "Node Value is not defined on which operator must be used."
-
-        return 0
-
+        raise AttributeError("The nodes on which the testcase needs to run should be defined ")
     except ValueError:
-        # raise ValueError("Value Error found not floatable value")
-        return 0
-    return 1
+        raise ValueError("Values are not floatable, should be floatable")
 
 def two_argument_delta(operator_args):
-    print "for delta"
     try:
         possible_val = operator_args.split(',')
 
         if len(possible_val) != 2:
-            print "Values not passed as expected for the operator"
+            raise IndexError("Required number of variables not passed for the operator " + possible_val[0])
             # Do we need to check if the value that is used by the user is
             # is % or not. Do we need to report it.
 
     except AttributeError:
         # If there is no comma separated values then this error will throw up
-        print "Node Value is not defined on which operator must be used."
+        raise AttributeError("Node Value is not defined on which operator must be used.")
 
 def n_argument_check(operator_args):
 
@@ -145,14 +126,14 @@ def n_argument_check(operator_args):
             # Maybe one good check.
     except AttributeError:
         # If there is no comma separated values then this error will throw up
-        print "Node Value is not defined on which operator must be used."
+        raise AttributeError("Node Value is not defined on which operator must be used.")
 
     except ValueError:
-        print "THere is no list of values to which the node value must be checked in"
+        raise ValueError("THere is no list of values to which the node value must be checked in")
 
 
 def check_valid_operator(operater_name, operator_value):
-    print operater_name, operator_value
+    # print operater_name, operator_value
     # print "Now you have the values Get them checking according to the function"
 
     switcher = {
@@ -175,7 +156,7 @@ def check_valid_operator(operater_name, operator_value):
         "not-in": n_argument_check
     }
 
-    return switcher[operater_name](operator_value)
+    switcher[operater_name](operator_value)
 
 
 
@@ -207,17 +188,23 @@ def main():
     except Exception as e:
         logger.error('Configuration file not valid : ' + str(e))
 
-def check_correct_function(test_details):
+def check_correct_function(test_details, item_name):
     # print "JAMMYBOI"
+    # print test_details
+    base_item_name = item_name
     for testinfo in test_details:
         operator = [x for x in testinfo if x not in ['err', 'info']]
-        return_val = check_valid_operator(operator[0], testinfo[operator[0]])
+        item_name = item_name + '.' + operator[0]
+        logger.debug('->validate_dict() %s: Checking if this operator values are defined properly ', item_name)
+        check_valid_operator(operator[0], testinfo[operator[0]])
 
-        if return_val and 'err' in testinfo and 'info' in testinfo:
-            print "ALL GOOD"
-        else:
-
-            logger.warning("KJASDKJBASDKJBASDKHBASDKHBM")
+        if 'err' in testinfo and 'info' not in testinfo:
+            raise ValueError("INFO for the testcase is missing")
+        elif 'err' not in testinfo and 'info' in testinfo:
+            raise ValueError("ERR for the testcase is missing")
+        elif 'err' not in testinfo and 'info' not in testinfo:
+            raise ValueError("INFO and ERR both for the testcase is missing")
+        item_name = base_item_name
 
 
 def validate_config( config_file, definition_file, name ):
@@ -398,9 +385,12 @@ def validate_dict( config, definition, definition_file, name ):
                             item_name + ": Following Testcase is not defined ' " + testcase + " '")
 
             if definition[key].has_key('function1'):
+                logger.debug('->validate_dict() %s: Option "function1" found, will check for if the operators '
+                             ' are defined properly in %s', item_name,
+                             definition[key]['function1'])
                 # print "JAMMY NOW CHEK IF THE OPERATOR ARE CORRECT OR NOT"
                 # print config.get('tests')
-                check_correct_function(config.get('tests'))
+                check_correct_function(config.get('tests'), item_name)
 
 
 
