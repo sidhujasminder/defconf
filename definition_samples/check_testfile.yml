@@ -1,0 +1,20 @@
+validate:
+    main:
+        test_include:        { type: list, mandatory: 0, function: tests}
+        '*':                 { type: list, validate: inner, mandatory: 0 }
+
+    inner:
+        iterate:             { type: dict, validate: more_inner, mandatory: 0 }
+        kwargs:              { type: dict }
+        rpc:                 { type: string }
+
+    more_inner:
+        xpath:               { type: string }
+        tests:               { type: list , function1: test1}
+        id:                  { type: string }
+
+function:
+    tests
+
+function1:
+    tests1

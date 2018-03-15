@@ -1,0 +1,60 @@
+test_include:
+  - test_show_interfaces
+  - test_show_interfaces_1
+
+test_show_interfaces:
+  - iterate:
+      xpath: physical-interface
+      id: name
+      tests:
+         - all-same:
+           info: "Passed"
+           err: "Failed"
+         - is-equal: admin-status, up
+           info: "Passed1"
+           err: "Failed1"
+         - not-equal: oper-status, 123
+           info: "Passed"
+           err: "Failed"
+         - exists: asdmin-status
+           info: "Passed1"
+           err: "Failed1"
+         - not-exists: oper-status
+           info: "Passed"
+           err: "Failed"
+         - contains: asdmin-status, jammy
+           info: "Passed1"
+           err: "Failed1"
+         - not-contains: oper-status, kizzy
+           info: "Passed"
+           err: "Failed"
+         - is-gt: asdmin-status, 12
+           info: "Passed1"
+           err: "Failed1"
+         - is-lt: asdmin-status, 12
+           info: "Passed1"
+           err: "Failed1"
+         - in-range: asdmin-status, 1, 12
+           info: "Passed1"
+           err: "Failed1"
+         - not-range: asdmin-status, 1, 12
+           info: "Passed1"
+           err: "Failed1"
+  - kwargs:
+      interface-name: lo0
+  - rpc: get-interface-information
+
+test_show_interfaces_1:
+  - iterate:
+      xpath: physical-interface
+      id: name
+      tests:
+         - no-diff: oper-status
+           info: "Passed"
+           err: "Failed"
+  - kwargs:
+      interface-name: lo0
+  - rpc: get-interface-information
+
+
+
