@@ -238,7 +238,9 @@ def validate_dict( config, definition, definition_file, name ):
 
     # Check if All mandatory elements are present
     for key, value in definition.iteritems():
+        print key, value
         if value.has_key('mandatory') and value['mandatory'] == 1 and not config.has_key(key):
+            item_name = name + '.' + key  # This is added to make it more error more easy to see.
             raise IndexError("Mandatory element " + item_name + " has not been found ")
 
     ######
@@ -332,7 +334,9 @@ def validate_dict( config, definition, definition_file, name ):
                         logger.debug('->validate_dict() %s: Will check block %s with %s', item_name, initial_key, validate_name )
 
                         if isinstance(config, list):
-                            validate_dict(config[0][initial_key], definition_file['validate'][validate_name], definition_file, item_name)
+                            # index_iterate in list
+                            index_iterate = [i[0] for i in enumerate(config) if 'iterate' in i[1]][0]
+                            validate_dict(config[index_command][initial_key], definition_file['validate'][validate_name], definition_file, item_name)
                         else:
                             validate_dict(config[initial_key], definition_file['validate'][validate_name],
                                           definition_file, item_name)
@@ -378,7 +382,7 @@ def validate_dict( config, definition, definition_file, name ):
                          definition[key]['function'])
 
                 ## getting all the possible testcases:
-                testlist = config.get('test_include')
+                testlist = config.get('tests_include')
                 for testcase in testlist:
                     if testcase not in config:
                         raise ValueError(
